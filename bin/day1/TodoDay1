@@ -1,0 +1,9 @@
+TODO
+
+Etapes
+	- Créer deux listes (doublons acceptés)
+	- Ordonner chaque liste par ordre croissant
+	- pour chaque paire de nombres, déterminer la distance
+		- méthode 1 : comparer les deux paramètres pour savoir lequel est le plus grand et éviter le nombre négatif
+		- utiliser Math.abs() sur le résultat de la soustraction
+	- additionner les distances obtenues en résultat
