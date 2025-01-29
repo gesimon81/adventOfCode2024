@@ -11,7 +11,7 @@ public class MainDay1 {
 	
 	
 	/**
-	 * Transforme les données de l'input en objets History
+	 * Transforme les données de l'input
 	 * @throws Exception
 	 */
 	private static void convertInput() throws Exception {
