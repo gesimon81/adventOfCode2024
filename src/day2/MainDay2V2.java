@@ -38,22 +38,28 @@ public class MainDay2V2 {
     	}
 	}
 	
+	/**
+	 * Parcours la liste des rapports pour compter le nombre de rapports valides
+	 * @return
+	 */
 	private static int countTotalReportsSafe() {
 		int nbTotalReportsSafe = 0;
 		
 		for(ArrayList<Integer> report : listAllReports) {
-			if(isReportSafeV2_test3(report))
+			if(isReportSafeV2(report))
 				nbTotalReportsSafe++;
-		}
-		
-		System.out.println("Result before Problem Dampener = " + nbTotalReportsSafe);
-		
+		}		
 		
 		return nbTotalReportsSafe;
 	}
 	
-	
-	private static boolean isReportSafeV2_test3(ArrayList<Integer> reportInput) {
+	/**
+	 * teste si un rapport est valide (décroissant ou croissant, si chaque nombres adjacents a un écart de [1;3]
+	 * Prends en compte la possibilité de supprimer un niveau du rapport si cela permet de le valider
+	 * @param reportInput rapport à tester
+	 * @return true si rapport valide
+	 */
+	private static boolean isReportSafeV2(ArrayList<Integer> reportInput) {
 		ArrayList<Integer> report = new ArrayList<Integer>(reportInput);
 		ArrayList<Integer> possibleReportByRemoval = new ArrayList<Integer>(reportInput);
 		ArrayList<Integer> possibleReportByRemovalPlusOne = new ArrayList<Integer>(reportInput);
@@ -160,27 +166,6 @@ public class MainDay2V2 {
 			compareAdjacent = Integer.compare(report.get(indexLevel), report.get(indexLevel + 1));
 			if(compareAdjacent <= 0) {
 				return false;
-			} 
-		}
-		
-		return isSafe;
-	}
-	
-	private static boolean isAllDecreasing(ArrayList<Integer> report, boolean aLevelIsRemovable) throws ALevelIsIncorrect {
-		boolean isSafe = true;
-		
-		int compareAdjacent;
-		
-		for(int indexLevel = 0; indexLevel < (report.size() - 1); indexLevel++) {
-			compareAdjacent = Integer.compare(report.get(indexLevel), report.get(indexLevel + 1));
-			if(compareAdjacent <= 0) {
-				if(aLevelIsRemovable) {
-					report.remove(indexLevel);
-					listReportsWithALevelRemoved.add(report);	//Si la modif est faite à cet endroit là, possible que le rapport soit ajouté en doublon sur la liste à check, si il est validé dans le second test.
-					throw new ALevelIsIncorrect();
-				} else {
-					return false;
-				}	
 			} 
 		}
 		
