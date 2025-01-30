@@ -38,22 +38,28 @@ public class MainDay2V2 {
     	}
 	}
 	
+	/**
+	 * Parcours la liste des rapports pour compter le nombre de rapports valides
+	 * @return
+	 */
 	private static int countTotalReportsSafe() {
 		int nbTotalReportsSafe = 0;
 		
 		for(ArrayList<Integer> report : listAllReports) {
-			if(isReportSafeV2_test3(report))
+			if(isReportSafeV2(report))
 				nbTotalReportsSafe++;
-		}
-		
-		System.out.println("Result before Problem Dampener = " + nbTotalReportsSafe);
-		
+		}		
 		
 		return nbTotalReportsSafe;
 	}
 	
-	
-	private static boolean isReportSafeV2_test3(ArrayList<Integer> reportInput) {
+	/**
+	 * teste si un rapport est valide (décroissant ou croissant, si chaque nombres adjacents a un écart de [1;3]
+	 * Prends en compte la possibilité de supprimer un niveau du rapport si cela permet de le valider
+	 * @param reportInput rapport à tester
+	 * @return true si rapport valide
+	 */
+	private static boolean isReportSafeV2(ArrayList<Integer> reportInput) {
 		ArrayList<Integer> report = new ArrayList<Integer>(reportInput);
 		ArrayList<Integer> possibleReportByRemoval = new ArrayList<Integer>(reportInput);
 		ArrayList<Integer> possibleReportByRemovalPlusOne = new ArrayList<Integer>(reportInput);
