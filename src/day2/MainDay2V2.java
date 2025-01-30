@@ -166,27 +166,6 @@ public class MainDay2V2 {
 		return isSafe;
 	}
 	
-	private static boolean isAllDecreasing(ArrayList<Integer> report, boolean aLevelIsRemovable) throws ALevelIsIncorrect {
-		boolean isSafe = true;
-		
-		int compareAdjacent;
-		
-		for(int indexLevel = 0; indexLevel < (report.size() - 1); indexLevel++) {
-			compareAdjacent = Integer.compare(report.get(indexLevel), report.get(indexLevel + 1));
-			if(compareAdjacent <= 0) {
-				if(aLevelIsRemovable) {
-					report.remove(indexLevel);
-					listReportsWithALevelRemoved.add(report);	//Si la modif est faite à cet endroit là, possible que le rapport soit ajouté en doublon sur la liste à check, si il est validé dans le second test.
-					throw new ALevelIsIncorrect();
-				} else {
-					return false;
-				}	
-			} 
-		}
-		
-		return isSafe;
-	}
-	
 	private static boolean isAllIncreasing(ArrayList<Integer> report) {
 		boolean isSafe = true;
 		
