@@ -68,6 +68,7 @@ public class MainDay5 {
 			if(isUpdateInRightOrder(update)) {				
 				//Add the middle number of the update
 				nbUpdatesRightOrder++;
+				System.out.println("update true : " + update );
 				//TODO
 			}
 		}
@@ -78,28 +79,25 @@ public class MainDay5 {
 	private static boolean isUpdateInRightOrder(String update) throws IllegalArgumentException {
 		String[] tabPageNumbers = update.split(",");
 				
-		for (int currentPageNumberIndex = 0; currentPageNumberIndex < tabPageNumbers.length - 1; currentPageNumberIndex++) {
+		for (int currentPageNumberIndex = 1; currentPageNumberIndex < tabPageNumbers.length; currentPageNumberIndex++) {
 	        String currentPage = tabPageNumbers[currentPageNumberIndex];
 
-	        // Vérifier si la page actuelle a des règles dans la map
-	        if (mapPageOrderingRules.containsKey(currentPage)) {
-	            
+	        // Vérifier si une des pages précédentes impose un ordre incorrect
+	        for (int previousPageIndex = 0; previousPageIndex < currentPageNumberIndex; previousPageIndex++) {
+	            String previousPage = tabPageNumbers[previousPageIndex];
 
-	            // Vérifier si l'une des pages suivantes ne devrait pas être avant la page actuelle
-	            for (int testPageNumberIndex = currentPageNumberIndex + 1; testPageNumberIndex < tabPageNumbers.length; testPageNumberIndex++) {
-	                String testPage = tabPageNumbers[testPageNumberIndex];
+	            if (mapPageOrderingRules.containsKey(previousPage)) {
+	                HashSet<String> restrictedPages = mapPageOrderingRules.get(previousPage);
 
-	                HashSet<String> restrictedPages = mapPageOrderingRules.get(testPage);
-	                
-	                System.out.println("Checking if " + currentPage + " should not be before " + testPage);
-	                System.out.println("Restricted pages for " + currentPage + " : " + restrictedPages);
-	                
-	                if (restrictedPages != null && !restrictedPages.isEmpty() && restrictedPages.contains(currentPage)) {
-	                    return false; // L'ordre est incorrect
+	                System.out.println("Checking if " + currentPage + " should not be after " + previousPage);
+	                System.out.println("Restricted pages for " + previousPage + " : " + restrictedPages);
+
+	                if (restrictedPages.contains(currentPage)) {
+	                    return false; // L'ordre d'update est incorrect
 	                }
 	            }
 	        }
-	    }
+        }
 		
 		return true;
 	}
