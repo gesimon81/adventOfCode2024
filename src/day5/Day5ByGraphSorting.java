@@ -2,6 +2,7 @@ package day5;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -38,6 +39,16 @@ public class Day5ByGraphSorting {
 	 * Liste des règles d'ordonnancement sous la forme "75|13"
 	 */
     private static Set<String> listPageOrderingRules;
+    
+    /**
+     * V1 Liste des updates ordonnées correctement 
+     */
+    private static ArrayList<String> correctlyOrderedUpdates;
+    
+    /**
+     * V2 (test) Liste des updates non ordonnées puis corrigées
+     */
+    private static ArrayList<String> fixedunorderedUpdates;
 	
 	/**
 	 * Transforme les données de l'input
@@ -80,8 +91,9 @@ public class Day5ByGraphSorting {
 	 * Se base sur le tri topographique pour vérifier l'ordre des updates
 	 * @param listUpdates sous la forme "75|29"
 	 */
-	private static ArrayList<String> generateOrderedPageList(ArrayList<String> listUpdates) {
-		ArrayList<String> correctlyOrderedUpdates = new ArrayList<String>();
+	private static void generateOrderedPageList(ArrayList<String> listUpdates) {
+		correctlyOrderedUpdates = new ArrayList<String>();
+		fixedunorderedUpdates = new ArrayList<String>();
 		
 		for(String update : listUpdates) {
 			String[] pagesUpdate = update.split(",");
@@ -105,11 +117,12 @@ public class Day5ByGraphSorting {
 			if(isOrdered) {
 				correctlyOrderedUpdates.add(update);
 			} else {
+				String reorderedUpdate = fixUnorderedUpdates(update, orderedPages);
+				fixedunorderedUpdates.add(reorderedUpdate);
 				isOrdered = true;
 			}
 		}
 		
-		return correctlyOrderedUpdates;
 	}
 	
 	/**
@@ -202,15 +215,51 @@ public class Day5ByGraphSorting {
 		return sumMiddlePagesNumber;
 	}
 	
+	
+	/**
+	 * V2 corriger les updates avec un ordre incorrect pour qu'elles respectent l'ordre d'update
+	 * @param unorderedUpdates2
+	 */
+	private static String fixUnorderedUpdates(String unorderedUpdate, ArrayList<String> orderedPages) {
+		// 1️ Créer une map avec les positions correctes
+        HashMap<String, Integer> orderMap = new HashMap<>();
+        for (int i = 0; i < orderedPages.size(); i++) {
+            orderMap.put(orderedPages.get(i), i);
+        }
+
+        // 2️ Trier la liste désordonnée en fonction de ces positions
+        ArrayList<String> pagesUpdate = new ArrayList<String>();
+		Collections.addAll(pagesUpdate, unorderedUpdate.split(","));
+		pagesUpdate.sort(Comparator.comparingInt(orderMap::get));
+		
+		String updatedOrdered = "";
+		for(String page : pagesUpdate) {
+			updatedOrdered += "," + page;
+		}
+		
+		
+        return updatedOrdered.substring(1);
+	}
+	
+	
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 		convertInput();
 		
-		ArrayList<String> correctlyOrderedUpdates = generateOrderedPageList(listUpdates);
+		//ArrayList<String> correctlyOrderedUpdates = generateOrderedPageList(listUpdates);
+		generateOrderedPageList(listUpdates);
+		
+		//V1
 		System.out.println("Nombre d'updates correctes = " + correctlyOrderedUpdates.size() + " sur " + listUpdates.size() + " updates");
 		
 		int resultV1 = calcMiddlePagesNumberUpdates(correctlyOrderedUpdates);
 		System.out.println("Resultat final V1 = " + resultV1);
+		
+		//V2
+		
+		int resultV2 = calcMiddlePagesNumberUpdates(fixedunorderedUpdates);
+		System.out.println("Resultat final V2 = " + resultV2);
 	}
+
+	
 
 }
